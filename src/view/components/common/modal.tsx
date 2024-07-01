@@ -15,11 +15,11 @@ const customStyles = {
 interface Props {
   children: ReactNode;
   onClose(): void;
+  isOpen: boolean;
 }
 
-export const Modal: FC<Props> = (props: Props) => {
-  const { children, onClose } = props;
-  const [modalIsOpen, setIsOpen] = useState(true);
+export const Modal: FC<Props> = ({ children, onClose, isOpen }: Props) => {
+  const [modalIsOpen, setIsOpen] = useState(isOpen);
 
   function closeModal() {
     setIsOpen(false);
@@ -28,7 +28,11 @@ export const Modal: FC<Props> = (props: Props) => {
 
   return (
     <div>
-      <ReactModal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles}>
+      <ReactModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+      >
         <button type="button" onClick={closeModal}>
           X
         </button>
