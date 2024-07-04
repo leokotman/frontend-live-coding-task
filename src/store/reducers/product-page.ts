@@ -3,10 +3,12 @@ import { LinkedProduct, Product } from '../../models';
 import {
   addProductToCompareList,
   getCategories,
+  getLinkedProducts,
   getProduct,
-  removeProductToCompareList,
+  removeProductFromCompareList,
 } from '../actions/product-page';
 import { Category } from '../../gateways/models/category';
+import { getMappingProducts } from '../../lib/getMappingProducts';
 
 type CatalogPageState = {
   product: Product | undefined;
@@ -55,12 +57,18 @@ export const productPageSlice = createSlice({
           action.payload,
         ];
       })
-      .addCase(removeProductToCompareList, (state, action) => {
+      .addCase(removeProductFromCompareList, (state, action) => {
         state.comparingProducts = [
           ...(state.comparingProducts || []).filter(
             (item) => item.id !== action.payload
           ),
         ];
+      })
+      .addCase(getLinkedProducts.fulfilled, (state, action) => {
+        state.linkedProducts = getMappingProducts(
+          state.product?.category?.id,
+          action.payload
+        );
       });
   },
 });

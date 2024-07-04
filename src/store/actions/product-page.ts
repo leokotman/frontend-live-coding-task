@@ -4,6 +4,7 @@ import { MockProductPageGateway } from '../../gateways/product-page';
 import { IProductPageRepository } from '../../services/products/interfaces';
 
 const API: IProductPageRepository = new MockProductPageGateway();
+
 export const setProduct = createAction<Product>(
   'product-card-page/set-product-card'
 );
@@ -16,12 +17,12 @@ export const addProductToCompareList = createAction<Product>(
   'product-card-page/add-product-card-to-compare-list'
 );
 
-export const removeProductToCompareList = createAction<string>(
-  'product-card-page/remove-product-card-to-compare-list'
+export const removeProductFromCompareList = createAction<string>(
+  'product-card-page/remove-product-card-from-compare-list'
 );
 
 export const getProduct = createAsyncThunk(
-  'product-card-page/get-products',
+  'product-card-page/get-product',
   async (id: string) => {
     const response = await API.getProduct(id);
     return response;

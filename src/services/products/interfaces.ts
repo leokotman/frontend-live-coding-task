@@ -17,3 +17,10 @@ export interface IProductPageRepository {
    */
   getCategories: () => Promise<Category[]>;
 }
+
+export interface IAllProductsPageRepository {
+  /**
+   * Возвращает все товары из API
+   */
+  getAllProducts: () => Promise<Product[]>;
+}
