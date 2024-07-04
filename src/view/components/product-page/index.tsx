@@ -28,7 +28,6 @@ const ProductPage: FC = () => {
     dispatch(getProduct(productId));
     dispatch(getLinkedProducts(productId));
   }, [productId]);
-  console.log('Загружена страница товара ', product);
 
   const handleAddToCompare = useCallback(
     (id: string) => {
@@ -45,9 +44,8 @@ const ProductPage: FC = () => {
   }, []);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div>Загрузка...</div>;
   }
-  console.log('comparelist', compareList);
 
   return (
     <>

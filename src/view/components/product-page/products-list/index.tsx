@@ -17,7 +17,7 @@ const PRODUCT_TYPES = {
 export const ProductsList = memo((props: ProductsListProps) => {
   const { products = [], addToCompareList } = props;
   const history = window.history;
-  const [productInModal, setProductInModal] = useState<LinkedProduct | null>(
+  const [productToShow, setProductToShow] = useState<LinkedProduct | null>(
     null
   );
 
@@ -27,8 +27,8 @@ export const ProductsList = memo((props: ProductsListProps) => {
         console.log('Добавление в сравнение товара');
         addToCompareList(item.id);
       } else {
-        console.log('Открытые модального окна');
-        setProductInModal(item);
+        console.log('Открытые модального окна с товаром: ', item);
+        setProductToShow(item);
       }
     },
     [addToCompareList]
@@ -36,7 +36,7 @@ export const ProductsList = memo((props: ProductsListProps) => {
 
   const handleModalClose = useCallback(() => {
     console.log('Закрытие модального окна');
-    setProductInModal(() => null);
+    setProductToShow(() => null);
   }, []);
 
   const isMobile = useLessThenMediaQuery(450);
@@ -46,14 +46,14 @@ export const ProductsList = memo((props: ProductsListProps) => {
       history.pushState({}, '');
       window.onpopstate = function (event) {
         if (event.state) {
-          console.log('Закрытие модального окна');
-          setProductInModal(() => null);
+          console.log('Закрытие модального окна с товаром: ', productToShow);
+          setProductToShow(() => null);
         } else {
           history.pushState({}, '', window.location.href);
         }
       };
     }
-  }, [isMobile, history]);
+  }, [isMobile, history, productToShow]);
 
   return (
     <>
@@ -68,11 +68,9 @@ export const ProductsList = memo((props: ProductsListProps) => {
         })}
       </ul>
 
-      {productInModal && (
-        <Modal isOpen={Boolean(productInModal)} onClose={handleModalClose}>
-          <ProductCard product={productInModal} />
-        </Modal>
-      )}
+      <Modal isOpen={Boolean(productToShow)} onClose={handleModalClose}>
+        {productToShow && <ProductCard product={productToShow} />}
+      </Modal>
     </>
   );
 });

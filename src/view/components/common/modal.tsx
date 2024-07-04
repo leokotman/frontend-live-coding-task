@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import ReactModal from 'react-modal';
 
 const customStyles = {
@@ -12,28 +12,17 @@ const customStyles = {
   },
 };
 
-interface Props {
+interface ModalProps {
   children: ReactNode;
   onClose(): void;
   isOpen: boolean;
 }
 
-export const Modal: FC<Props> = ({ children, onClose, isOpen }: Props) => {
-  const [modalIsOpen, setIsOpen] = useState(isOpen);
-
-  function closeModal() {
-    setIsOpen(false);
-    onClose();
-  }
-
+export const Modal: FC<ModalProps> = ({ children, onClose, isOpen }) => {
   return (
     <div>
-      <ReactModal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-      >
-        <button type="button" onClick={closeModal}>
+      <ReactModal isOpen={isOpen} onRequestClose={onClose} style={customStyles}>
+        <button type="button" onClick={onClose}>
           X
         </button>
         <div>{children}</div>

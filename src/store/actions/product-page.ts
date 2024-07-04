@@ -4,6 +4,7 @@ import { MockProductPageGateway } from '../../gateways/product-page';
 import { IProductPageRepository } from '../../services/products/interfaces';
 
 const API: IProductPageRepository = new MockProductPageGateway();
+
 export const setProduct = createAction<Product>(
   'product-card-page/set-product-card'
 );
@@ -21,7 +22,7 @@ export const removeProductFromCompareList = createAction<string>(
 );
 
 export const getProduct = createAsyncThunk(
-  'product-card-page/get-products',
+  'product-card-page/get-product',
   async (id: string) => {
     const response = await API.getProduct(id);
     return response;
