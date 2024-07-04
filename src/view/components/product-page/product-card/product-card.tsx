@@ -13,15 +13,15 @@ export const ProductCard: FC<Props> = ({
   return (
     <div>
       <h3>{product.name}</h3>
-      Price {product.price}
+      Цена: {product.price}
       {onRemoveFromCompareList && (
         <button
           onClick={() => {
             onRemoveFromCompareList(product.id);
-            console.log('удаление товара из сравнения ', product.id);
+            console.log('Удаление товара из сравнения ', product.id);
           }}
         >
-          Remove
+          Удалить
         </button>
       )}
     </div>
