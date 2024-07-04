@@ -1,78 +1,75 @@
-import { FC, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store';
-import { Product } from '../../../models';
-import { addProductToCompareList } from '../../../store/actions/product-page';
-import { Modal } from '../common/modal';
-import { ProductCard } from '../common/product-card';
+import { FC, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+
+import { dispatch } from '../../../store';
+import {
+  addProductToCompareList,
+  getLinkedProducts,
+  getProduct,
+  removeProductFromCompareList,
+} from '../../../store/actions/product-page';
+import { ProductCard } from './product-card/product-card';
+import {
+  compareListSelector,
+  linkedProductsSelector,
+  productSelector,
+} from '../../../store/selectors/product-page';
+import { ProductsList } from './products-list';
 
 const ProductPage: FC = () => {
-  const dispatch = useDispatch();
+  const { productId = '' } = useParams();
 
-  const product = useSelector((state: RootState) => state.productPage.product);
-  const linkedProducts = useSelector(
-    (state: RootState) => state.productPage.linkedProducts
+  const product = useSelector(productSelector);
+  const compareList = useSelector(compareListSelector);
+  const linkedProducts = useSelector(linkedProductsSelector);
+
+  useEffect(() => {
+    dispatch(getProduct(productId));
+    dispatch(getLinkedProducts(productId));
+  }, [productId]);
+
+  const handleAddToCompare = useCallback(
+    (id: string) => {
+      const product = linkedProducts.find((item) => item.id === id);
+      if (product) {
+        dispatch(addProductToCompareList(product));
+      }
+    },
+    [linkedProducts]
   );
-  const comparingProducts = useSelector(
-    (state: RootState) => state.productPage.comparingProducts
-  );
-  const [showModal, setShowModal] = useState(false);
 
-  const handleAddToCompare = (product: Product) => {
-    dispatch(addProductToCompareList(product));
-  };
-
-  const openModal = () => {
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-  };
+  const handleRemoveFromCompareList = useCallback((id: string) => {
+    dispatch(removeProductFromCompareList(id));
+  }, []);
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div>Загрузка...</div>;
   }
 
   return (
-    <div>
-      <h1>{product.name}</h1>
-      <p>Price: ${product.price}</p>
-
-      <button onClick={openModal}>View Product Details</button>
-
-      {linkedProducts && (
-        <div>
-          <h2>Linked Products</h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {linkedProducts.map((linkedProduct) => (
+    <>
+      <div>
+        <>
+          <Link to="/">В список товаров</Link>
+          {product && <ProductCard product={product} key={product.id} />}
+          <div>
+            <span>Сравнение</span>
+            {compareList.map((item, index) => (
               <ProductCard
-                key={linkedProduct.id}
-                product={linkedProduct}
-                onAddToCompare={handleAddToCompare}
+                key={item.id + item.name + index}
+                product={item}
+                onRemoveFromCompareList={handleRemoveFromCompareList}
               />
             ))}
           </div>
-        </div>
-      )}
-
-      <Modal onClose={closeModal} isOpen={showModal}>
-        <h2>Product Details</h2>
-        <p>Name: {product.name}</p>
-        <p>Price: ${product.price}</p>
-      </Modal>
-
-      {comparingProducts && comparingProducts.length > 0 && (
-        <div>
-          <h2>Comparing Products</h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {comparingProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+        </>
+      </div>
+      <ProductsList
+        products={linkedProducts}
+        addToCompareList={handleAddToCompare}
+      />
+    </>
   );
 };
 

@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "ESNEXT",
     "module": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,13 +17,7 @@
     "jsx": "react-jsx",
     "alwaysStrict": true
   },
-  "compilerOptions": {
-    "jsx": "react-jsxdev",
-    "esModuleInterop": true
-  },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "filesGlob": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["build", "node_modules"]
 }
