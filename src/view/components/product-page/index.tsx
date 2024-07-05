@@ -1,6 +1,7 @@
 import { FC, useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 
 import { dispatch } from '../../../store';
 import {
@@ -15,7 +16,7 @@ import {
   linkedProductsSelector,
   productSelector,
 } from '../../../store/selectors/product-page';
-import { ProductsList } from './products-list';
+import { ProductsList } from './products-list/products-list';
 
 const ProductPage: FC = () => {
   const { productId = '' } = useParams();
@@ -44,32 +45,41 @@ const ProductPage: FC = () => {
   }, []);
 
   if (!product) {
-    return <div>Загрузка...</div>;
+    return <Typography>Загрузка...</Typography>;
   }
 
   return (
-    <>
-      <div>
-        <>
-          <Link to="/">В список товаров</Link>
-          {product && <ProductCard product={product} key={product.id} />}
-          <div>
-            <span>Сравнение</span>
-            {compareList.map((item, index) => (
-              <ProductCard
-                key={item.id + item.name + index}
-                product={item}
-                onRemoveFromCompareList={handleRemoveFromCompareList}
-              />
-            ))}
-          </div>
-        </>
-      </div>
+    <Box component="section" gap={2}>
+      <Grid container gap={1} component="section">
+        <Grid item xs={6} component="article">
+          <Button variant="outlined">
+            <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
+              В список товаров
+            </Link>
+          </Button>
+          <Paper elevation={1} sx={{ marginTop: 1 }}>
+            {product && <ProductCard product={product} key={product.id} />}
+          </Paper>
+        </Grid>
+        <Grid item xs={5} container component="article" gap={1}>
+          <Typography width="100%">Сравнение</Typography>
+          {compareList.map((item, index) => (
+            <Grid item key={item.id + item.name + index}>
+              <Paper elevation={1}>
+                <ProductCard
+                  product={item}
+                  onRemoveFromCompareList={handleRemoveFromCompareList}
+                />
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
       <ProductsList
         products={linkedProducts}
         addToCompareList={handleAddToCompare}
       />
-    </>
+    </Box>
   );
 };
 

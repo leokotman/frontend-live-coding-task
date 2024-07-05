@@ -1,3 +1,4 @@
+import { Button, Paper } from '@mui/material';
 import { FC, ReactNode } from 'react';
 import ReactModal from 'react-modal';
 
@@ -20,13 +21,13 @@ interface ModalProps {
 
 export const Modal: FC<ModalProps> = ({ children, onClose, isOpen }) => {
   return (
-    <div>
+    <Paper elevation={1}>
       <ReactModal isOpen={isOpen} onRequestClose={onClose} style={customStyles}>
-        <button type="button" onClick={onClose}>
+        <Button type="button" variant="contained" onClick={onClose}>
           X
-        </button>
+        </Button>
         <div>{children}</div>
       </ReactModal>
-    </div>
+    </Paper>
   );
 };

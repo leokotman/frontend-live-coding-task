@@ -1,4 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react';
+import { Box, Button } from '@mui/material';
+
 import { LinkedProduct } from '../../../../models';
 import { Modal } from '../../common/modal';
 import { ProductCard } from '../product-card/product-card';
@@ -56,13 +58,15 @@ export const ProductsList = memo((props: ProductsListProps) => {
   }, [isMobile, history, productToShow]);
 
   return (
-    <>
+    <Box p={2} component="section">
       <ul>
         {products.map((item) => {
           return (
             <li key={item.id}>
               {item.linkType && PRODUCT_TYPES[item.linkType]}:{' '}
-              <button onClick={() => handleItemClick(item)}>{item.name}</button>
+              <Button onClick={() => handleItemClick(item)} variant="outlined">
+                {item.name}
+              </Button>
             </li>
           );
         })}
@@ -71,6 +75,6 @@ export const ProductsList = memo((props: ProductsListProps) => {
       <Modal isOpen={Boolean(productToShow)} onClose={handleModalClose}>
         {productToShow && <ProductCard product={productToShow} />}
       </Modal>
-    </>
+    </Box>
   );
 });
