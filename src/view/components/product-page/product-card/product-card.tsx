@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Product } from '../../../../models';
+import { Button, Card, CardContent } from '@mui/material';
 
 interface Props {
   product: Product;
@@ -11,19 +12,22 @@ export const ProductCard: FC<Props> = ({
   onRemoveFromCompareList,
 }) => {
   return (
-    <div>
-      <h3>{product.name}</h3>
-      Цена: {product.price}
-      {onRemoveFromCompareList && (
-        <button
-          onClick={() => {
-            onRemoveFromCompareList(product.id);
-            console.log('Удаление товара из сравнения ', product.id);
-          }}
-        >
-          Удалить
-        </button>
-      )}
-    </div>
+    <Card>
+      <CardContent>
+        <h3>{product.name}</h3>
+        Цена: {product.price}
+        {onRemoveFromCompareList && (
+          <Button
+            onClick={() => {
+              onRemoveFromCompareList(product.id);
+              console.log('Удаление товара из сравнения ', product.id);
+            }}
+            variant="contained"
+          >
+            Удалить
+          </Button>
+        )}
+      </CardContent>
+    </Card>
   );
 };
